@@ -1,0 +1,40 @@
+# Replicate Cog Configuration for Qwen2-VL Fashion Matcher
+build:
+  # Use CUDA-enabled environment
+  gpu: true
+  cuda: "12.1"
+  
+  # Python version
+  python_version: "3.11"
+  
+  # System dependencies
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libglib2.0-0"
+    
+  # Python dependencies
+  python_packages:
+    # Vision Language Model
+    - "torch>=2.3.0"
+    - "torchvision>=0.18.0"
+    - "transformers>=4.46.0"
+    - "qwen-vl-utils"
+    - "accelerate>=0.26.0"
+    
+    # Computer Vision
+    - "pillow>=10.0.0"
+    - "opencv-python-headless"
+    
+    # Science & Math
+    - "numpy>=1.24.0"
+    - "scipy>=1.10.0"
+    
+    # Utils
+    - "requests>=2.32.0"
+    
+  # Model files will be downloaded during build
+  run:
+    - "mkdir -p /tmp/model_cache"
+
+# Prediction interface
+predict: "predict.py:Predictor"
