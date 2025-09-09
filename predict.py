@@ -18,7 +18,7 @@ from pathlib import Path
 from PIL import Image
 from datetime import datetime
 
-import cog
+from cog import BasePredictor, Input
 from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 
@@ -330,24 +330,25 @@ IMPORTANT RULES:
             return None
 
 
-class Predictor(cog.Predictor):
+class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
         self.analyzer = FashionAnalyzer()
         # Pre-load model
         self.analyzer._ensure_model_loaded()
 
-    @cog.input("image", type=cog.File, help="Fashion image to analyze")
-    def predict(self, image: cog.File) -> Dict[str, Any]:
+    def predict(
+        self, 
+        image: Path = Input(description="Fashion image to analyze")
+    ) -> Dict[str, Any]:
         """
         Analyze fashion image using optimized Qwen2-VL with color cleaning and enhanced prompts.
         Returns detailed garment attributes including cleaned colors for database compatibility.
         """
         
         # Save uploaded image to temporary file
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as tmp_file:
-            tmp_file.write(image.read())
-            tmp_path = tmp_file.name
+        # Use the image path directly since it's already a Path object
+        tmp_path = str(image)
         
         try:
             # Analyze the image
