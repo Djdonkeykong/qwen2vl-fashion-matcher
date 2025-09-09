@@ -18,7 +18,7 @@ from pathlib import Path
 from PIL import Image
 from datetime import datetime
 
-from cog import BasePredictor, Input
+from cog import BasePredictor, Input, Path as CogPath
 from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 
@@ -339,7 +339,7 @@ class Predictor(BasePredictor):
 
     def predict(
         self, 
-        image: Path = Input(description="Fashion image to analyze")
+        image: CogPath = Input(description="Fashion image to analyze")
     ) -> Dict[str, Any]:
         """
         Analyze fashion image using optimized Qwen2-VL with color cleaning and enhanced prompts.
